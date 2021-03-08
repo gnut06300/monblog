@@ -32,4 +32,18 @@ class ArticlesController extends AbstractController
             'articles' => $articles,
         ]);
     }
+	/**
+	 * @Route("/{slug}", name="article")
+	*/
+	public function article($slug){
+		// On récupère l'article correspondant au slug
+    $article = $this->getDoctrine()->getRepository(Articles::class)->findOneBy(['slug' => $slug]);
+    if(!$article){
+        // Si aucun article n'est trouvé, nous créons une exception
+        throw $this->createNotFoundException('L\'article n\'existe pas');
+    }
+    // Si l'article existe nous envoyons les données à la vue
+    return $this->render('articles/article.html.twig', compact('article'));
+
+	}
 }
